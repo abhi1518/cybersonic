@@ -2564,7 +2564,7 @@ section {
 }
 
 .footer .footer-info .logo {
-  line-height: 0;
+  /* line-height: 0; */
   margin-bottom: 25px;
 }
 
