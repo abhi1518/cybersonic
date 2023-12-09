@@ -1,4 +1,4 @@
-<?php
+ <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $name = $_POST["name"];
@@ -17,7 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = "New Contact Form Submission";
 
     // Send email
-    $success = mail($to, $subject, $email_content);
+    $headers = "From: $email\r\n" . // Set the From header
+    "Reply-To: $email\r\n"; // Set the Reply-To header
+
+// Send email
+   $success = mail($to, $subject, $email_content, $headers);
+
 
     // Check if email was sent successfully
     if ($success) {
@@ -30,3 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "invalid request";
 }
 ?>
+
+
+
