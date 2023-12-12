@@ -1,10 +1,17 @@
- <?php
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $subject = $_POST["subject"];
-    $message = $_POST["message"];
+    // Sanitize form data
+    $name = htmlspecialchars($_POST["name"]);
+    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+    $subject = htmlspecialchars($_POST["subject"]);
+    $message = htmlspecialchars($_POST["message"]);
+
+    // Validate email address
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Handle invalid email address
+        echo "Invalid email address";
+        exit();
+    }
 
     // Create email content
     $email_content = "Name: $name\n";
@@ -13,28 +20,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email_content .= "Message:\n$message";
 
     // Email configuration
-    $to = "abhishek11rajput@gmail.com"; // Replace with your email address
+    $to = "techcybersonic@gmail.com"; // Replace with your email address
     $subject = "New Contact Form Submission";
+    $headers = "From: $email" . "\r\n" .
+               "Reply-To: $email" . "\r\n" .
+               "CC: abdu8543378@gmail.com"; // Add CC if necessary
 
     // Send email
-    $headers = "From: $email\r\n" . // Set the From header
-    "Reply-To: $email\r\n"; // Set the Reply-To header
-
-// Send email
-   $success = mail($to, $subject, $email_content, $headers);
-
+    $success = mail($to, $subject, $email_content, $headers);
 
     // Check if email was sent successfully
     if ($success) {
-        echo "sent";
+        echo "Your message has been sent. Thank you!";
     } else {
-        echo "error";
+        echo "Failed to send the message. Please try again later.";
     }
 } else {
     // Form was not submitted
-    echo "invalid request";
+    echo "Invalid request";
 }
 ?>
-
-
-
